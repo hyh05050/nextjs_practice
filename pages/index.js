@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import Seo from "../components/Seo";
 
 export default function Home({ results }) {
@@ -11,13 +13,36 @@ export default function Home({ results }) {
     })();
   }, []);
   */
+
+  const router = useRouter();
+  const onClick = (id, title) => {
+    router.push(`/movies/${title}/${id}`);
+    /*
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title: title,
+        },
+      },
+      `/movies/${id}` //해당 url에서 Masking
+    );
+    */
+  };
+
   return (
     <div className="container">
       <Seo title="Home" />
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
+        <div
+          className="movie"
+          key={movie.id}
+          onClick={() => onClick(movie.id, movie.original_title)}
+        >
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+          <Link href={`/movies/${movie.id}`}>
+            <h4>{movie.original_title}</h4>
+          </Link>
         </div>
       ))}
       <style jsx>{`
